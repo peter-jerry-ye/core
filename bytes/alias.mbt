@@ -38,30 +38,35 @@ pub fn default() -> Bytes {
 }
 
 ///|
+/// Creates a `Bytes` from a fixed array, optionally truncating to `len`.
 #deprecated("Use `Bytes::from_array` instead")
 pub fn from_fixedarray(arr : FixedArray[Byte], len? : Int) -> Bytes {
   Bytes::from_array(arr[:len.unwrap_or(arr.length())])
 }
 
 ///|
+/// Collects bytes from an `Iter` into a new `Bytes`.
 #deprecated("Use `Bytes::from_iter` instead")
 pub fn from_iter(iter : Iter[Byte]) -> Bytes {
   Bytes::from_iter(iter)
 }
 
 ///|
+/// Collects bytes from an `Iterator` into a new `Bytes`.
 #deprecated("Use `Bytes::from_iterator` instead")
 pub fn from_iterator(iter : Iterator[Byte]) -> Bytes {
   Bytes::from_array(iter.collect())
 }
 
 ///|
+/// Creates a `Bytes` from an array view.
 #deprecated("Use `Bytes::from_array` instead")
 pub fn of(arr : ArrayView[Byte]) -> Bytes {
   Bytes::from_array(arr)
 }
 
 ///|
+/// Creates a `Bytes` from an array view.
 #deprecated("Use `Bytes::from_array` instead")
 pub fn from_array(arr : ArrayView[Byte]) -> Bytes {
   Bytes::from_array(arr)

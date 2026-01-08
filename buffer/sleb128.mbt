@@ -13,11 +13,13 @@
 // limitations under the License.
 
 ///|
+/// Trait for values that can be encoded as LEB128 into a buffer.
 trait Leb128 {
   output(Self, Buffer) -> Unit
 }
 
 ///|
+/// Encodes an Int as signed LEB128 into the buffer.
 pub impl Leb128 for Int with output(self, buffer) {
   for value = self {
     let byte = value & 0x7f // Get the low 7 bits
@@ -39,6 +41,7 @@ pub impl Leb128 for Int with output(self, buffer) {
 }
 
 ///|
+/// Encodes an Int64 as signed LEB128 into the buffer.
 pub impl Leb128 for Int64 with output(self, buffer) {
   for value = self {
     let byte = value & 0x7f // Get the low 7 bits
@@ -60,6 +63,12 @@ pub impl Leb128 for Int64 with output(self, buffer) {
 }
 
 ///|
+/// Writes a LEB128-encoded value into the buffer.
+///
+/// Parameters:
+///
+/// * `buffer` : The buffer to write to.
+/// * `value` : The value to encode using the `Leb128` trait.
 pub fn[A : Leb128] Buffer::write_leb128(buffer : Buffer, value : A) -> Unit {
   value.output(buffer)
 }
