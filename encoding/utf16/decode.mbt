@@ -13,6 +13,7 @@
 // limitations under the License.
 
 ///|
+/// Raised when the input contains invalid UTF-16 sequences.
 pub suberror Malformed {
   Malformed(BytesView)
 }
@@ -23,6 +24,10 @@ pub suberror Malformed {
 const U_REP = '\u{FFFD}'
 
 ///|
+/// Decodes UTF-16 bytes into a String.
+///
+/// Raises `Malformed` if the byte sequence is not valid UTF-16.
+/// When `ignore_bom` is true, a leading BOM matching `endianness` is skipped.
 pub fn decode(
   bytes : BytesView,
   ignore_bom? : Bool = false,
@@ -100,8 +105,10 @@ pub fn decode(
 }
 
 ///|
-/// 
-/// References : 
+/// Decodes UTF-16 bytes into a String, replacing invalid sequences with U+FFFD.
+///
+/// When `ignore_bom` is true, a leading BOM matching `endianness` is skipped.
+/// References:
 /// - https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-3/#G66453
 pub fn decode_lossy(
   bytes : BytesView,

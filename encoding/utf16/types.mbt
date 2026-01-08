@@ -13,6 +13,7 @@
 // limitations under the License.
 
 ///|
+/// Byte order used for UTF-16 encoding and decoding.
 pub(all) enum Endian {
   Little
   Big
