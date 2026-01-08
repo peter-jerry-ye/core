@@ -45,6 +45,11 @@ pub impl Show for Error with output(self, logger) {
 fn Error::to_json(self : Error) -> Json = "%error.to_json"
 
 ///|
+/// Implements `ToJson` for `Error` by converting the error into a JSON value.
+///
+/// Parameters:
+///
+/// * `self`: The error value to be converted.
 pub impl ToJson for Error with to_json(self) {
   self.to_json()
 }
