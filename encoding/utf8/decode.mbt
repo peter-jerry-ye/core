@@ -13,11 +13,17 @@
 // limitations under the License.
 
 ///|
+/// Error raised when UTF-8 decoding encounters malformed byte sequences.
+/// Contains the remaining bytes starting at the invalid sequence.
 pub suberror Malformed {
   Malformed(BytesView)
 }
 
 ///|
+/// Decodes UTF-8 bytes into a string.
+///
+/// If `ignore_bom` is true and the input starts with a UTF-8 BOM, it is skipped.
+/// Raises `Malformed` with the remaining bytes starting at the invalid sequence.
 pub fn decode(
   bytes : BytesView,
   ignore_bom? : Bool = false,
@@ -121,7 +127,10 @@ pub fn decode(
 }
 
 ///|
-/// 
+/// Decodes UTF-8 bytes into a string, replacing malformed sequences with U+FFFD.
+///
+/// If `ignore_bom` is true and the input starts with a UTF-8 BOM, it is skipped.
+///
 /// References : 
 /// - https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-3/#G66453
 /// - https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-5/#G40630
