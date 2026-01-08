@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-///|
+///| The maximum value representable by `Byte` (`0xFF`).
 pub let max_value : Byte = b'\xFF'
 
-///|
+///| The minimum value representable by `Byte` (`0x00`).
 pub let min_value : Byte = b'\x00'
