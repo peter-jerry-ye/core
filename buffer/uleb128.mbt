@@ -13,6 +13,7 @@
 // limitations under the License.
 
 ///|
+/// Encodes a UInt as unsigned LEB128 into the buffer.
 pub impl Leb128 for UInt with output(self, buffer) {
   for value = self {
     if value < 128 {
@@ -28,6 +29,7 @@ pub impl Leb128 for UInt with output(self, buffer) {
 }
 
 ///|
+/// Encodes a UInt64 as unsigned LEB128 into the buffer.
 pub impl Leb128 for UInt64 with output(self, buffer) {
   for value = self {
     if value < 128 {

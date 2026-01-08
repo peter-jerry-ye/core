@@ -13,6 +13,12 @@
 // limitations under the License.
 
 ///|
+/// Writes a string into the buffer using UTF-8 encoding.
+///
+/// Parameters:
+///
+/// * `buf` : The buffer to write to.
+/// * `string` : The string view to encode as UTF-8.
 /// Extensible buffer.
 ///
 /// It provides accumulative concatenation of bytes in linear time.
@@ -42,6 +48,12 @@ struct Buffer {
 }
 
 ///|
+/// Writes a string into the buffer using UTF-16LE encoding.
+///
+/// Parameters:
+///
+/// * `buf` : The buffer to write to.
+/// * `string` : The string view to encode as UTF-16LE.
 /// Expand the buffer size if capacity smaller than required space.
 fn Buffer::grow_if_necessary(self : Buffer, required : Int) -> Unit {
   let start = if self.data.length() <= 0 { 1 } else { self.data.length() }
@@ -59,6 +71,12 @@ fn Buffer::grow_if_necessary(self : Buffer, required : Int) -> Unit {
 }
 
 ///|
+/// Writes a string into the buffer using UTF-16BE encoding.
+///
+/// Parameters:
+///
+/// * `buf` : The buffer to write to.
+/// * `string` : The string view to encode as UTF-16BE.
 /// Returns the number of bytes currently stored in the buffer.
 ///
 /// Parameters:
@@ -1065,11 +1083,16 @@ pub fn Buffer::to_bytes(self : Buffer) -> Bytes {
 }
 
 ///|
+/// Returns a view of the buffer's active bytes.
+///
+/// The returned view shares storage with the buffer and is only valid until the
+/// buffer is modified.
 pub fn Buffer::view(self : Buffer) -> ArrayView[Byte] {
   self.data[0:self.len]
 }
 
 ///|
+/// Writes the buffer contents to a logger as an unchecked string.
 pub impl Show for Buffer with output(self, logger) {
   logger.write_string(self.contents().to_unchecked_string())
 }
