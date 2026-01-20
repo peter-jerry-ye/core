@@ -56,8 +56,11 @@ pub fn Path::is_last(self : Path) -> Bool {
 }
 
 ///|
-/// Push the given `idx` as the last segment to `self`.
+/// Push given `idx` as last segment to `self`.
 pub fn Path::push(self : Path, idx : Int) -> Path {
+  guard idx >= 0 && idx < 32 else {
+    abort("Path::push: index out of bounds (idx=\{idx}, must be in [0, 31])")
+  }
   let Path(self) = self
   (self << SEGMENT_LENGTH) | idx.reinterpret_as_uint()
 }

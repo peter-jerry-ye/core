@@ -20,14 +20,22 @@ pub(all) struct Bitset(UInt) derive(Eq)
 let empty_bitset : Bitset = Bitset(0)
 
 ///|
-/// Check if the given index is present in the bitset.
+/// Check if if given index is present in the bitset.
 pub fn Bitset::has(self : Bitset, idx : Int) -> Bool {
+  guard idx >= 0 && idx < 32 else {
+    abort("Bitset::has: index out of bounds (idx=\{idx}, must be in [0, 31])")
+  }
   (self.0 & (1U << idx)) != 0
 }
 
 ///|
-/// Get the index of the bit in the bitset.
+/// Get index of bit in bitset.
 pub fn Bitset::index_of(self : Bitset, idx : Int) -> Int {
+  guard idx >= 0 && idx < 32 else {
+    abort(
+      "Bitset::index_of: index out of bounds (idx=\{idx}, must be in [0, 31])",
+    )
+  }
   (self.0 & ((1U << idx) - 1)).popcnt()
 }
 
@@ -47,15 +55,23 @@ pub fn Bitset::intersection(self : Bitset, other : Bitset) -> Bitset {
 }
 
 ///|
-/// Add a new index to the bitset.
+/// Add a new index to bitset.
 pub fn Bitset::add(self : Bitset, idx : Int) -> Bitset {
+  guard idx >= 0 && idx < 32 else {
+    abort("Bitset::add: index out of bounds (idx=\{idx}, must be in [0, 31])")
+  }
   Bitset(self.0 | (1U << idx))
 }
 
 ///|
-/// Remove an index from the bitset.
+/// Remove an index from bitset.
 pub fn Bitset::remove(self : Bitset, idx : Int) -> Bitset {
-  Bitset(self.0 ^ (1U << idx))
+  guard idx >= 0 && idx < 32 else {
+    abort(
+      "Bitset::remove: index out of bounds (idx=\{idx}, must be in [0, 31])",
+    )
+  }
+  Bitset(self.0 & ((1U << idx) ^ 0xFFFFFFFFU))
 }
 
 ///|
