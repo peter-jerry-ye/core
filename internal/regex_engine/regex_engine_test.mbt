@@ -234,3 +234,31 @@ test "Regex::group_names includes capture name" {
   assert_eq(names[0], None)
   assert_eq(names[1], Some("x"))
 }
+
+///|
+test "is_anchored for sequences - anchored at start" {
+  let pat = @regex_engine.seq([
+    @regex_engine.start_of_input,
+    @regex_engine.char(@regex_engine.RecharSet::char('a')),
+  ])
+  assert_true(pat.is_anchored())
+}
+
+///|
+test "is_anchored for sequences - not anchored when anchor in middle" {
+  let pat = @regex_engine.seq([
+    @regex_engine.char(@regex_engine.RecharSet::char('a')),
+    @regex_engine.start_of_input,
+    @regex_engine.char(@regex_engine.RecharSet::char('b')),
+  ])
+  assert_false(pat.is_anchored())
+}
+
+///|
+test "is_anchored for sequences - not anchored without start_of_input" {
+  let pat = @regex_engine.seq([
+    @regex_engine.char(@regex_engine.RecharSet::char('a')),
+    @regex_engine.char(@regex_engine.RecharSet::char('b')),
+  ])
+  assert_false(pat.is_anchored())
+}
