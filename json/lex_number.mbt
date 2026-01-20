@@ -158,11 +158,21 @@ fn ParseContext::lex_number_end(
       Ok(i) if i <= 9007199254740991 && i >= -9007199254740991 =>
         return (i.to_double(), None)
       _ =>
-        return if s is ['-', ..] {
-          (@double.neg_infinity, Some(s))
-        } else {
-          (@double.infinity, Some(s))
-        }
+        // Integers outside Int64 range cannot be represented exactly as Double
+        // Return an error instead of treating them as Infinity
+        raise InvalidNumber(ctx.position(), s.to_string())
+    }
+  } else {
+    let parsed_double = try? @strconv.parse_double(s)
+    match parsed_double {
+      // For normal values, return without string representation
+      Ok(d) => (d, None)
+      // If parsing fails as a double, this is an invalid number
+      Err(_) =>
+        raise InvalidNumber(ctx.position(), s.to_string())
+    }
+  }
+}
     }
   } else {
     let parsed_double = try? @strconv.parse_double(s)
