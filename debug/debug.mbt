@@ -197,7 +197,8 @@ pub impl[T : Debug] Debug for Ref[T] with to_repr(self) {
 pub impl[A : Debug + Compare] Debug for @priority_queue.PriorityQueue[A] with to_repr(
   self,
 ) {
-  // `PriorityQueue` iteration order depends on internal heap state; sort for stable output.
+  // `PriorityQueue` iteration order depends on internal heap state.
+  // Output order may vary across runs or targets - heap order is not stable.
   let xs : Array[Repr] = self.to_array().map(Debug::to_repr)
   Repr::opaque_("PriorityQueue", Repr::array(xs))
 }
