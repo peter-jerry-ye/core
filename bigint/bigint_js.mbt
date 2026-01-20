@@ -18,12 +18,48 @@ type BigInt
 ///|
 let zero = 0N
 
+fn is_valid_digit(c : Char) -> Bool {
+  let x = c.to_int()
+  x >= '0'.to_int() && x <= '9'.to_int()
+}
+
+fn is_valid_decimal_string(str : String, start_index : Int) -> Bool {
+  if start_index >= str.length() {
+    return false
+  }
+  for i in start_index..<str.length() {
+    if !is_valid_digit(str.unsafe_get(i)) {
+      return false
+    }
+  }
+  true
+}
+
 ///|
 pub fn BigInt::from_string(str : String) -> BigInt {
   if str.length() == 0 {
     abort("empty string")
   }
   BigInt::js_from_string(str)
+}
+
+///|
+pub fn BigInt::try_from_string(str : String) -> BigInt? {
+  if str.length() == 0 {
+    return None
+  }
+  let start_index = if str.unsafe_get(0) == '-' {
+    if str.length() == 1 {
+      return None
+    }
+    1
+  } else {
+    0
+  }
+  if !is_valid_decimal_string(str, start_index) {
+    return None
+  }
+  Some(BigInt::js_from_string(str))
 }
 
 ///|

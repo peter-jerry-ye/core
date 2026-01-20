@@ -1050,6 +1050,66 @@ pub fn BigInt::from_string(input : String) -> BigInt {
 }
 
 ///|
+/// Safely parses a decimal string to a `BigInt`. Returns `None` on error.
+///
+/// Parameters:
+///
+/// * `input` : A string containing decimal representation of an integer.
+///
+/// Returns `Some(BigInt)` if the string is valid, `None` if:
+///
+/// * The input string is empty.
+/// * The input string contains characters other than decimal digits (0-9).
+/// * The input string has an invalid format.
+///
+/// Example:
+///
+/// ```mbt check
+/// test {
+///   inspect(@bigint.BigInt::try_from_string("12345"), content="Some(12345)")
+///   inspect(@bigint.BigInt::try_from_string("-12345"), content="Some(-12345)")
+///   inspect(@bigint.BigInt::try_from_string(""), content="None")
+///   inspect(@bigint.BigInt::try_from_string("12a34"), content="None")
+/// }
+/// ```
+pub fn BigInt::try_from_string(input : String) -> BigInt? {
+  let len = input.length()
+  if len == 0 {
+    return None
+  }
+  let sign : Sign = if input.unsafe_get(0) == '-' { Negative } else { Positive }
+  let mut b_len = (
+      unchecked_double_to_int(len.to_double() / decimal_ratio) +
+      1 +
+      radix_bit_len
+    ) /
+    radix_bit_len +
+    1
+  let b = FixedArray::make(b_len, 0U)
+  for
+    i in (match sign {
+      Negative => 1
+      Positive => 0
+    })..<input.length() {
+    let x = input.unsafe_get(i).to_int() - '0'.to_int()
+    if x < 0 || x > 9 {
+      return None
+    }
+    let mut carry = x.reinterpret_as_uint().to_uint64()
+    for j in 0..<b_len {
+      carry += b[j].to_uint64() * 10
+      b[j] = (carry % radix).to_uint()
+      carry /= radix
+    }
+  }
+  while b[b_len - 1] == 0 && b_len > 1 {
+    b_len -= 1
+  }
+  let sign = if b_len == 1 && b[0] == 0 { Positive } else { sign }
+  Some({ limbs: b, sign, len: b_len })
+}
+
+///|
 /// Converts a hexadecimal string to a `BigInt`. The string can be prefixed with
 /// a minus sign (`-`) to indicate a negative number. The string must contain
 /// only hexadecimal digits (`0-9`, `a-f`, or `A-F`).

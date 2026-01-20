@@ -52,8 +52,12 @@ pub impl @json.FromJson for BigInt with from_json(json, path) {
       (path, "BigInt::from_json: expected number in string representation"),
     )
   }
-  // TODO: Capture parse failure
-  BigInt::from_string(s)
+  match BigInt::try_from_string(s) {
+    None => raise @json.JsonDecodeError(
+      (path, "BigInt::from_json: invalid BigInt string"),
+    )
+    Some(result) => result
+  }
 }
 
 ///|

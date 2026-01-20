@@ -706,6 +706,30 @@ test "BigInt from_json error handling" {
 }
 
 ///|
+test "BigInt from_json invalid string" {
+  let json_invalid_string = Json::string("123abc")
+  let result : Result[BigInt, _] = try? @json.from_json(json_invalid_string)
+  inspect(
+    result,
+    content=(
+      #|Err(JsonDecodeError((, "BigInt::from_json: invalid BigInt string")))
+    ),
+  )
+}
+
+///|
+test "BigInt from_json empty string" {
+  let json_empty_string = Json::string("")
+  let result : Result[BigInt, _] = try? @json.from_json(json_empty_string)
+  inspect(
+    result,
+    content=(
+      #|Err(JsonDecodeError((, "BigInt::from_json: invalid BigInt string")))
+    ),
+  )
+}
+
+///|
 test "Array from_json error handling" {
   let json_string = Json::string("not an array")
   let result : Result[Array[Int], _] = try? @json.from_json(json_string)
