@@ -87,12 +87,15 @@ extern "c" fn getcwd(ptr : Bytes, size : Int) -> Int = "getcwd"
 
 ///|
 fn current_dir_internal() -> String? {
-  // TODO: On Windows getcwd may fail if the path is too long(Windows allows paths up to 32k characters)
-  let buf = Bytes::new(4096)
-  let res = getcwd(buf, buf.length())
-  if res == 0 {
-    None
-  } else {
-    Some(utf8_bytes_to_mbt_string(buf))
+  let mut size = 4096
+  let mut max_size = 32768
+  while size <= max_size {
+    let buf = Bytes::new(size)
+    let res = getcwd(buf, buf.length())
+    if res != 0 {
+      return Some(utf8_bytes_to_mbt_string(buf))
+    }
+    size = size * 2
   }
+  None
 }

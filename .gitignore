@@ -15,4 +15,4 @@ bisect.coverage
 .moonagent/
 node_modules/
 _build
-target
+target.beads/
