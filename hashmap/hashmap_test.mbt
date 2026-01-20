@@ -20,6 +20,24 @@ test "new" {
 }
 
 ///|
+test "new with minimum capacity" {
+  let m1 : @hashmap.HashMap[Int, Int] = @hashmap.new(capacity=0)
+  inspect(m1.capacity(), content="8")
+
+  let m2 : @hashmap.HashMap[Int, Int] = @hashmap.new(capacity=1)
+  inspect(m2.capacity(), content="8")
+
+  let m3 : @hashmap.HashMap[Int, Int] = @hashmap.new(capacity=2)
+  inspect(m3.capacity(), content="8")
+
+  let m4 : @hashmap.HashMap[Int, Int] = @hashmap.new(capacity=8)
+  inspect(m4.capacity(), content="8")
+
+  let m5 : @hashmap.HashMap[Int, Int] = @hashmap.new(capacity=16)
+  inspect(m5.capacity(), content="16")
+}
+
+///|
 test "get" {
   let m = @hashmap.new()
   m.set("a", 1)

@@ -13,17 +13,17 @@
 // limitations under the License.
 
 ///|
-/// Creates a new empty hash map with the specified initial capacity. The actual
-/// capacity will be rounded up to the next power of 2 that is greater than or
-/// equal to the requested capacity, with a minimum of 8.
+/// Creates a new empty hash map with a specified initial capacity. The actual
+/// capacity will be rounded up to the next power of 2, with a minimum
+/// actual capacity of 8.
 ///
 /// Parameters:
 ///
-/// * `capacity` : The desired minimum capacity of the hash map. Must be a
+/// * `capacity` : The desired capacity of hash map. Must be a
 /// non-negative integer. Defaults to 8 if not specified.
 ///
-/// Returns a new empty hash map of type `T[K, V]`, where `K` is the key type and
-/// `V` is the value type.
+/// Returns a new empty hash map of type `T[K, V]`, where `K` is a key type and
+/// `V` is a value type.
 ///
 /// Example:
 ///
@@ -36,7 +36,7 @@
 /// ```
 #as_free_fn
 pub fn[K, V] HashMap::new(capacity? : Int = 8) -> HashMap[K, V] {
-  let capacity = capacity.next_power_of_two()
+  let capacity = (capacity.next_power_of_two()).max(8)
   {
     size: 0,
     capacity,
