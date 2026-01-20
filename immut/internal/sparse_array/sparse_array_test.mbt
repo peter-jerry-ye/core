@@ -90,3 +90,53 @@ test "SparseArray::iter" {
   })
   inspect(buf, content="0, 1, 3, 31")
 }
+
+///|
+test "SparseArray::union empty inputs" {
+  let empty_arr = (@sparse_array.empty() : @sparse_array.SparseArray[Int])
+  let non_empty_arr = @sparse_array.singleton(0, 0).add(1, 1).add(2, 2)
+  
+  let result1 = empty_arr.union(non_empty_arr, (_x, y) => y)
+  inspect([result1.get(0), result1.get(1), result1.get(2)], content="[Some(0), Some(1), Some(2)]")
+  
+  let result2 = non_empty_arr.union(empty_arr, (x, _y) => x)
+  inspect([result2.get(0), result2.get(1), result2.get(2)], content="[Some(0), Some(1), Some(2)]")
+  
+  let result3 = empty_arr.union(empty_arr, (_x, _y) => _x)
+  inspect(result3.data, content="[]")
+}
+
+///|
+test "SparseArray::difference empty inputs" {
+  let empty_arr = (@sparse_array.empty() : @sparse_array.SparseArray[Int])
+  let non_empty_arr = @sparse_array.singleton(0, 0).add(1, 1).add(2, 2)
+  
+  let result1 = empty_arr.difference(non_empty_arr, (_x, _y) => None)
+  match result1 {
+    None => inspect(true, content="true")
+    Some(_) => inspect(false, content="true")
+  }
+  
+  let result2 = non_empty_arr.difference(empty_arr, (x, _y) => Some(x))
+  match result2 {
+    None => inspect(false, content="true")
+    Some(arr) => inspect([arr.get(0), arr.get(1), arr.get(2)], content="[Some(0), Some(1), Some(2)]")
+  }
+  
+  let result3 = empty_arr.difference(empty_arr, (_x, _y) => None)
+  match result3 {
+    None => inspect(true, content="true")
+    Some(_) => inspect(false, content="true")
+  }
+}
+
+///|
+test "SparseArray::filter empty input" {
+  let empty_arr = (@sparse_array.empty() : @sparse_array.SparseArray[Int])
+  
+  let result = empty_arr.filter(_x => Some(_x))
+  match result {
+    None => inspect(true, content="true")
+    Some(_) => inspect(false, content="true")
+  }
+}

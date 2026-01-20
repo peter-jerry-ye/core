@@ -122,7 +122,12 @@ pub fn[X] SparseArray::union(
   if union_elem_info == empty_bitset {
     return { elem_info: union_elem_info, data: [] }
   }
-  let data = FixedArray::make(union_elem_info.length(), self.data[0])
+  let default_value = if self.elem_info == empty_bitset {
+    other.data[0]
+  } else {
+    self.data[0]
+  }
+  let data = FixedArray::make(union_elem_info.length(), default_value)
   for rest = union_elem_info, index = 0; rest != empty_bitset; {
     let idx = rest.first_idx()
     data[index] = match self.get(idx) {
