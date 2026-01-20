@@ -182,9 +182,9 @@ fn enforce_pref(
 
 ///|
 fn[T] iter(n : Int, f : (T) -> T, init : T) -> T {
-  if n == 0 {
-    init
-  } else {
-    iter(n - 1, f, f(init))
+  let mut acc = init
+  for _ in 0..<n {
+    acc = f(acc)
   }
+  acc
 }

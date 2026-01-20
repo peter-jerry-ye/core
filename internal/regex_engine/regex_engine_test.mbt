@@ -234,3 +234,15 @@ test "Regex::group_names includes capture name" {
   assert_eq(names[0], None)
   assert_eq(names[1], Some("x"))
 }
+
+///|
+test "large quantifier does not cause stack overflow" {
+  let pat = @regex_engine.quantifier(
+    @regex_engine.char(@regex_engine.RecharSet::char('a')),
+    { min: 1000, max: Some(1000), mode: Greedy },
+  )
+  let re = @regex_engine.compile(profile~, pat)
+  let s = "a".repeat(1000)
+  guard re.execute(s[:], 0) is Some(mr) else { fail("Expected match") }
+  assert_eq(mr.group(0), Some((0, 1000)))
+}
