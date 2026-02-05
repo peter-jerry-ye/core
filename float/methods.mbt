@@ -395,6 +395,13 @@ pub fn Float::until(
 pub fn Float::to_double(self : Float) -> Double = "%f32.to_f64"
 
 ///|
+/// Converts a floating-point number to a JSON number value.
+///
+/// Parameters:
+///
+/// * `self` : The floating-point number to be converted.
+///
+/// Returns a JSON number representing the float value.
 pub impl ToJson for Float with to_json(self : Float) -> Json {
   Json::number(self.to_double())
 }
