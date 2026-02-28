@@ -14,8 +14,9 @@
 
 ///|
 /// Encodes a string into a UTF-16 byte array.
-/// 
-/// Assuming the string is valid.
+///
+/// When `bom` is true, a BOM is prepended using the selected `endianness`.
+/// Assumes the string contains valid UTF-16 code units.
 pub fn encode(
   str : StringView,
   bom? : Bool = false,
